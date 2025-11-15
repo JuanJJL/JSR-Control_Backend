@@ -13,20 +13,12 @@ async def create_user(username: str, password: str, role_id: int):
 
     db = Conection()
 
-    try:
+    result = await db.execute(
+        "INSERT INTO users (username, password_hash, role_id) VALUES (?,?,?)",
+        [username,password_hash,role_id]
+    )
 
-        result = await db.execute(
-            "INSERT INTO users (username, password_hash, role_id) VALUES (?,?,?)",
-            [username,password_hash,role_id]
-        )
-
-        if result.rows_affected == 0:
-            return None
-
-        return {"message": "Usuario creado exitosamente", "username": username}
-    
-    except Exception:
-        raise
+    return {"message": "Usuario creado exitosamente", "username": username}
 
 async def get_users() -> list[User]:
     

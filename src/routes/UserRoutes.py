@@ -8,7 +8,7 @@ from ..controllers import UserController
 app = FastAPI()
 
 
-@app.post("/user/create", response_model=User)
+@app.post("/user/create")
 async def create_user(
     username: str,
     password: str,
