@@ -6,11 +6,9 @@ from datetime import datetime
 class User(BaseModel):
     id: int
     username: str
+    password: str
     password_hash: str
     role_id: int
+    status: int
     created_at: str 
     updated_at: str
-
-class UserUpdate(BaseModel):
-    username: str
-    role_id: int
