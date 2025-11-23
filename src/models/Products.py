@@ -1,9 +1,17 @@
-# src/models/Users.py
 from ..config.Conection import Conection
 
-async def create_users_table():
+async def create_product_tables():
     db = Conection()
     try:
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS product_categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                category VARCHAR(30) NOT NULL UNIQUE,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL
+            );
+        """)
+        
         await db.execute("""
             CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,9 +25,8 @@ async def create_users_table():
                 FOREIGN KEY (category_id) REFERENCES product_categories(id)
             );
         """)
-        print("Tabla 'users' verificada/creada exitosamente.")
+        print("Tablas de productos verificadas/creadas exitosamente.")
     except Exception as e:
-        print(f"Error al crear la tabla 'users': {e}")
+        print(f"Error al crear las tablas de productos: {e}")
     finally:
-        # Cerrar la conexión para evitar advertencias de aiohttp
         await db.close()
