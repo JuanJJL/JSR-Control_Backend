@@ -1,5 +1,5 @@
 from fastapi import HTTPException, FastAPI, APIRouter
-from ..database.User_schema import User
+from ..database.User_schema import User, User_create
 from ..controllers import UserController
 
 
@@ -8,8 +8,8 @@ router_users = APIRouter(prefix="/users", tags=["users"])
 
 
 
-@router_users.post("/create")
-async def create_user(data: User):
+@router_users.post("/create" )
+async def create_user(data: User_create):
     
     if not data.username or len(data.username) < 3:
         raise HTTPException(status_code=400, detail="El nombre de usuario debe tener por lo menos 3 caracteres")

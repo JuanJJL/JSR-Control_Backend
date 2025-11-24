@@ -5,6 +5,7 @@ from ..controllers.AuthController import hash_password
 async def get_user_by_username(username):
     db = Conection()
 
+
     result = await db.execute(
         "SELECT username from users where username = ? ",
         [username]
@@ -12,8 +13,13 @@ async def get_user_by_username(username):
 
     if not result.rows:
         return None
+    
 
     return result.rows[0][0]
+
+
+    
+
 
 
 async def create_user(username: str, password: str, role_id: int):
@@ -43,6 +49,8 @@ async def get_users() -> list[User]:
             "SELECT * FROM users"
         )
 
+        db.close
+
         user_list =[ User(**dict(zip(result.columns, row)))
             for row in result.rows]
             
@@ -50,6 +58,7 @@ async def get_users() -> list[User]:
     
     except Exception as e:
         return {"message": f"{e}"}
+    
         
     
 
@@ -61,6 +70,8 @@ async def get_users_by_id(user_id: int) -> User:
             f"SELECT * FROM users WHERE id =?",
             [user_id]    
         )
+
+        db.close
 
         if not result.rows:
             return None
@@ -85,9 +96,12 @@ async def update_user(user_id: int, username: str, role_id: int) -> bool:
             "UPDATE users SET username = ?, role_id = ? WHERE id = ?",
             [username, role_id, user_id]
         )
+
+        db.close
         
         return True
     except Exception as e:
+        db.close
         return {"message": f"{e}"}
 
     
@@ -100,6 +114,11 @@ async def deactivate_user(user_id: int):
         "DELETE FROM users WHERE ID = ?",
         [user_id]
     )
+
+
+    db.close
+
+
 
     return True
     
