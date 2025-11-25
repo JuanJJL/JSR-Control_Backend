@@ -15,7 +15,7 @@ async def create_category(category_name: str) -> Product_Category:
         
         new_id = insert_result.last_insert_rowid
         if new_id is None:
-             raise Exception("No se pudo obtener el ID de la categoría.")
+            raise Exception("No se pudo obtener el ID de la categoría.")
 
         # Recuperar el objeto completo para devolver
         result = await db.execute(
