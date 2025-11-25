@@ -1,11 +1,10 @@
-# src/controllers/ProductController.py
 from ..config.Conection import Conection
 from ..database.Products_schema import Product, ProductCreate, ProductUpdate
 from ..database.Product_Categories_schema import Product_Category, ProductCategoryCreate
 from typing import List, Optional
 
 #crud de categorias de productos
-async def create_category(category_name: str) -> Product_Category:
+async def create_category(category_name: str) -> Product_Category: #el Product_Create se importa desde el schema y se usa para validar los datos de entrada
     db = Conection()
     try:
         insert_result = await db.execute(
@@ -17,14 +16,13 @@ async def create_category(category_name: str) -> Product_Category:
         if new_id is None:
              raise Exception("No se pudo obtener el ID de la categoría.")
 
-        # Recuperar el objeto completo para devolver
         result = await db.execute(
             "SELECT id, category, created_at, updated_at FROM product_categories WHERE id = ?",
             [new_id]
         )
-        category_dict = dict(zip(result.columns, result.rows[0]))
-        return Product_Category(**category_dict)
-    
+
+        category_dict = dict(zip(result.columns, result.rows[0])) #se crea el diccionario a partir de las columnas y la fila
+        return Product_Category(**category_dict) #los 2 asteriscos descomprimen el diccionario en argumentos de palabra clave es decir, key=value
     finally:
         await db.close()
 
